@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>casflux</title>
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #1a1a1f;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-family: 'Courier New', monospace;
+  }
+
+  .wrap {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .glow-bg {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 600px;
+    height: 600px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(180,150,255,0.15) 0%, rgba(26,26,31,0) 70%);
+    pointer-events: none;
+  }
+
+  #text {
+    width: 320px;
+    text-align: left;
+    font-size: 64px;
+    font-weight: bold;
+    color: #d8caff;
+    letter-spacing: 4px;
+    text-shadow: 0 0 20px rgba(180,150,255,0.6), 0 0 40px rgba(180,150,255,0.3);
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 4px;
+    background: #d8caff;
+    margin-left: 4px;
+    animation: blink 0.8s steps(2) infinite;
+    box-shadow: 0 0 10px rgba(180,150,255,0.8);
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .tagline {
+    margin-top: 18px;
+    font-size: 16px;
+    color: #8a7fa8;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeIn 1s ease forwards;
+    animation-delay: 2.4s;
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  .socials {
+    margin-top: 120px;
+    display: flex;
+    gap: 18px;
+    opacity: 0;
+    animation: fadeIn 1s ease forwards;
+    animation-delay: 2.8s;
+  }
+
+  .socials a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    background: rgba(180,150,255,0.08);
+    border: 1px solid rgba(180,150,255,0.35);
+    color: #d8caff;
+    text-decoration: none;
+    font-size: 14px;
+    letter-spacing: 1px;
+    transition: all 0.25s ease;
+  }
+
+  .socials a:hover {
+    background: rgba(180,150,255,0.25);
+    box-shadow: 0 0 18px rgba(180,150,255,0.6);
+    transform: translateY(-3px);
+  }
+
+  .socials svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    flex-shrink: 0;
+  }
+
+  #music-toggle {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(180,150,255,0.1);
+    border: 1px solid rgba(180,150,255,0.4);
+    color: #d8caff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    z-index: 10;
+  }
+
+  #music-toggle:hover {
+    background: rgba(180,150,255,0.25);
+    box-shadow: 0 0 18px rgba(180,150,255,0.6);
+  }
+
+  #music-toggle svg {
+    width: 22px;
+    height: 22px;
+    fill: currentColor;
+  }
+
+  #yt-player-container {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="glow-bg"></div>
+
+<div class="wrap">
+  <div id="text"></div>
+  <div class="tagline">xoji aka</div>
+
+  <div class="socials">
+    <a href="https://t.me/casflux" target="_blank" title="Telegram">
+      <svg viewBox="0 0 24 24"><path d="M21.94 4.15c.26-1.06-.84-1.9-1.83-1.46L2.4 10.5c-1.03.46-1 1.95.05 2.36l4.4 1.73 1.7 5.4c.24.76 1.2.97 1.75.38l2.45-2.62 4.55 3.35c.85.63 2.07.17 2.3-.86l3.34-16.09zM8.5 14.2l9.7-8.6c.24-.21.5.1.3.33l-8 8.7-.31 3.2-1.2-3.6z"/></svg>
+      <span>Telegram</span>
+    </a>
+    <a href="https://instagram.com/casflux" target="_blank" title="Instagram">
+      <svg viewBox="0 0 24 24"><path d="M12 2c2.72 0 3.06.01 4.12.06 1.06.05 1.79.22 2.42.47.66.26 1.22.6 1.77 1.15.55.55.9 1.11 1.15 1.77.25.63.42 1.36.47 2.42.05 1.06.06 1.4.06 4.12s-.01 3.06-.06 4.12c-.05 1.06-.22 1.79-.47 2.42a4.9 4.9 0 0 1-1.15 1.77 4.9 4.9 0 0 1-1.77 1.15c-.63.25-1.36.42-2.42.47-1.06.05-1.4.06-4.12.06s-3.06-.01-4.12-.06c-1.06-.05-1.79-.22-2.42-.47a4.9 4.9 0 0 1-1.77-1.15 4.9 4.9 0 0 1-1.15-1.77c-.25-.63-.42-1.36-.47-2.42C2.01 15.06 2 14.72 2 12s.01-3.06.06-4.12c.05-1.06.22-1.79.47-2.42.26-.66.6-1.22 1.15-1.77A4.9 4.9 0 0 1 5.45.54C6.08.29 6.81.12 7.87.07 8.94.02 9.28 0 12 0zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4zm5.2-8.4a1.17 1.17 0 1 1 0-2.34 1.17 1.17 0 0 1 0 2.34z"/></svg>
+      <span>Instagram</span>
+    </a>
+    <a href="tel:+998931484900" title="Qo'ng'iroq qilish">
+      <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24 11.36 11.36 0 0 0 3.57.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.36 11.36 0 0 0 .57 3.57 1 1 0 0 1-.25 1.02l-2.2 2.2z"/></svg>
+      <span>Qo'ng'iroq</span>
+    </a>
+  </div>
+</div>
+
+<div id="yt-player-container">
+  <div id="yt-player"></div>
+</div>
+
+<button id="music-toggle" title="Musiqa">
+  <svg id="music-icon-off" viewBox="0 0 24 24" style="display:none"><path d="M16.5 12A4.5 4.5 0 0 0 14 8v1.9l2.4 2.4c.06-.1.1-.19.1-.3zm2.5 0c0 .94-.2 1.82-.54 2.63l1.51 1.51A8.94 8.94 0 0 0 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3 3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 0 0 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4 9.91 6.09 12 8.18V4z"/></svg>
+  <svg id="music-icon-on" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+</button>
+<script>
+const word = "casflux";
+const el = document.getElementById('text');
+let i = 0;
+
+function type() {
+  if (i <= word.length) {
+    el.innerHTML = word.slice(0, i) + '<span class="cursor">&nbsp;</span>';
+    i++;
+    setTimeout(type, 180);
+  } else {
+    // keep cursor blinking at the end, restart the loop after a pause
+    setTimeout(() => {
+      i = 0;
+      eraseLoop();
+    }, 2200);
+  }
+}
+
+function eraseLoop() {
+  let j = word.length;
+  function erase() {
+    if (j >= 0) {
+      el.innerHTML = word.slice(0, j) + '<span class="cursor">&nbsp;</span>';
+      j--;
+      setTimeout(erase, 90);
+    } else {
+      setTimeout(() => { i = 0; type(); }, 500);
+    }
+  }
+  erase();
+}
+
+type();
+</script>
+
+<script>
+  const VIDEO_ID = "EMDhqk8VHlE";
+  let ytPlayer;
+  let isPlaying = false;
+
+  const tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  document.body.appendChild(tag);
+
+  function onYouTubeIframeAPIReady() {
+    ytPlayer = new YT.Player('yt-player', {
+      height: '1',
+      width: '1',
+      videoId: VIDEO_ID,
+      playerVars: {
+        autoplay: 1,
+        mute: 1,
+        loop: 1,
+        playlist: VIDEO_ID,
+        controls: 0
+      },
+      events: {
+        onReady: (e) => {
+          e.target.mute();
+          e.target.playVideo();
+        }
+      }
+    });
+  }
+  window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+
+  const toggleBtn = document.getElementById('music-toggle');
+  const iconOn = document.getElementById('music-icon-on');
+  const iconOff = document.getElementById('music-icon-off');
+
+  toggleBtn.addEventListener('click', () => {
+    if (!ytPlayer) return;
+    if (isPlaying) {
+      ytPlayer.mute();
+      isPlaying = false;
+      iconOn.style.display = 'block';
+      iconOff.style.display = 'none';
+    } else {
+      ytPlayer.unMute();
+      ytPlayer.playVideo();
+      isPlaying = true;
+      iconOn.style.display = 'none';
+      iconOff.style.display = 'block';
+    }
+  });
+</script>
+
+</body>
+</html>
